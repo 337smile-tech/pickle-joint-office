@@ -270,13 +270,17 @@
             <button class="ghost" type="submit">담기</button>
           </form>
         </div>
-        <div class="mini-card">
+        <div class="mini-card local-only">
           <h3>🔑 가족 PIN</h3>
           <p class="tiny-hint">PIN을 바꾸거나 잊었을 때 다시 정할 수 있어요.</p>
           <div class="pin-actions">
             <button class="ghost" id="btnChangePin">PIN 바꾸기</button>
             <button class="ghost danger" id="btnResetPin">PIN 다시 정하기</button>
           </div>
+        </div>
+        <div class="mini-card remote-only" hidden>
+          <h3>🔑 가족 PIN</h3>
+          <p class="tiny-hint">실시간 연결 중에는 Apps Script의 <b>FAMILY_PIN</b> 값이 우리 가족 비밀번호예요. 바꾸려면 시트 → 확장 프로그램 → Apps Script에서 그 값을 고치고 다시 배포하면 돼요.</p>
         </div>
       </div>
       <button class="ghost lock-again" id="btnLock">🔒 다시 잠그기</button>
@@ -321,6 +325,28 @@
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 가족 PIN 잠금 (실시간 연결 모드) -->
+<div class="gate" id="gate" hidden>
+  <div class="gate-card">
+    <div class="gate-icon" aria-hidden="true">🔒</div>
+    <h2>우리 가족 비서실</h2>
+    <p class="gate-sub">가족 PIN을 넣으면 쪽지와 미션이 열려요.</p>
+    <p class="gate-note">페이지는 공개지만, 우리 이야기는 PIN 없이는 보이지 않아요.</p>
+    <div class="pin-dots" id="gateDots"><i></i><i></i><i></i><i></i></div>
+    <div class="keypad" id="gateKeys">
+      <button data-gate="1">1</button><button data-gate="2">2</button><button data-gate="3">3</button>
+      <button data-gate="4">4</button><button data-gate="5">5</button><button data-gate="6">6</button>
+      <button data-gate="7">7</button><button data-gate="8">8</button><button data-gate="9">9</button>
+      <button data-gate="clear" class="key-fn">지움</button><button data-gate="0">0</button><button data-gate="back" class="key-fn">⌫</button>
+    </div>
+    <p class="pin-msg" id="gateMsg"></p>
+    <div class="gate-actions">
+      <button class="primary big" id="gateOk">열기</button>
+      <button class="ghost small" id="gateSettings">설정</button>
+    </div>
+  </div>
+</div>
 
 <!-- 설정 -->
 <div class="modal" id="settingsModal" hidden>

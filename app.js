@@ -8,6 +8,7 @@ const LS = {
   data: 'cjs.data.v2',
   api: 'cjs.api.v2',
   pin: 'cjs.pin.v2',
+  pinSession: 'cjs.pin.session.v2',
   pending: 'cjs.pending.v2',
   idea: 'cjs.idea.v2',
   unlocked: 'cjs.unlocked.v2',
@@ -92,6 +93,7 @@ function defaultData() {
 const app = {
   data: defaultData(),
   api: '',
+  pin: '',
   pending: [],
   online: false,
   busy: false,
@@ -133,6 +135,7 @@ function apiCall(action, payload) {
   const url = new URL(app.api);
   url.searchParams.set('action', action);
   if (payload) url.searchParams.set('payload', JSON.stringify(payload));
+  if (app.pin) url.searchParams.set('pin', app.pin);
   url.searchParams.set('t', String(now()));
 
   const ctl = ('AbortController' in window) ? new AbortController() : null;
@@ -154,6 +157,7 @@ function apiCall(action, payload) {
 
 async function refresh(quiet) {
   if (!app.api || app.busy) return;
+  if (!app.pin) return;
   app.busy = true;
   try {
     if (app.pending.length) await flushPending();
@@ -166,6 +170,7 @@ async function refresh(quiet) {
     setSync('online');
   } catch (e) {
     app.online = false;
+    if (e && e.message === 'invalid_pin') { lockApp('PIN이 바뀌었어요. 다시 입력해 주세요.'); return; }
     setSync('error');
     if (!quiet) toast('연결이 잠깐 끊겼어요. 이 기기에 저장된 내용을 보여 드려요.');
   } finally {
@@ -228,6 +233,7 @@ async function write(action, payload) {
     setSync('online');
     return true;
   } catch (e) {
+    if (e && e.message === 'invalid_pin') { lockApp('PIN이 바뀌었어요. 다시 입력해 주세요.'); return false; }
     app.pending.push({ action: action, payload: payload });
     store.set(LS.pending, app.pending);
     app.online = false;
@@ -458,14 +464,98 @@ let pad = { mode: 'unlock', buf: '', first: '', after: null };
 function getPin() { return store.raw(LS.pin, ''); }
 
 function renderFamily() {
-  const unlocked = sessionStorage.getItem(LS.unlocked) === '1';
+  const remote = !!app.api;
+  const unlocked = remote ? !!app.pin : sessionStorage.getItem(LS.unlocked) === '1';
   const content = document.getElementById('familyContent');
-  const gate = document.getElementById('familyGate');
-  if (!content || !gate) return;
+  const gateBox = document.getElementById('familyGate');
+  if (!content || !gateBox) return;
   content.hidden = !unlocked;
-  gate.hidden = unlocked;
+  gateBox.hidden = unlocked;
+  document.querySelectorAll('.local-only').forEach(function (e) { e.hidden = remote; });
+  document.querySelectorAll('.remote-only').forEach(function (e) { e.hidden = !remote; });
   const idea = document.getElementById('ideaText');
   if (idea) idea.textContent = store.raw(LS.idea, '비밀의 문 너머에는 어떤 방이 있을까요?');
+}
+
+/* ---------- 가족 PIN 잠금 (실시간 연결 모드) ---------- */
+const gateState = { buf: '' };
+
+function lockApp(msg) {
+  app.pin = '';
+  app.online = false;
+  writeSession('');
+  stopPolling();
+  gateState.buf = '';
+  const g = document.getElementById('gate');
+  if (g) g.hidden = false;
+  gateDots(0);
+  const m = document.getElementById('gateMsg');
+  if (m) { m.textContent = msg || ''; m.classList.remove('ok'); }
+  setSync('offline');
+  const t = document.getElementById('syncText');
+  if (t) t.textContent = '잠김 · 가족 PIN 필요';
+}
+
+function hideGate() {
+  const g = document.getElementById('gate');
+  if (g) g.hidden = true;
+}
+
+function writeSession(v) {
+  try { if (v) sessionStorage.setItem(LS.pinSession, v); else sessionStorage.removeItem(LS.pinSession); } catch (e) {}
+}
+
+function gateDots(n) {
+  const box = document.getElementById('gateDots');
+  if (!box) return;
+  const need = Math.max(4, n);
+  while (box.children.length < need) box.appendChild(document.createElement('i'));
+  Array.prototype.forEach.call(box.children, function (d, i) { d.classList.toggle('on', i < n); });
+}
+
+function gateMsg(text, ok) {
+  const m = document.getElementById('gateMsg');
+  if (!m) return;
+  m.textContent = text || '';
+  m.classList.toggle('ok', !!ok);
+}
+
+function gateInput(key) {
+  if (key === 'back') gateState.buf = gateState.buf.slice(0, -1);
+  else if (key === 'clear') gateState.buf = '';
+  else if (/^[0-9]$/.test(key) && gateState.buf.length < 8) gateState.buf += key;
+  gateDots(gateState.buf.length);
+  if (gateState.buf.length) gateMsg('');
+}
+
+async function submitGate() {
+  const pin = gateState.buf.trim();
+  if (!pin) { gateMsg('PIN을 입력해 주세요.'); return; }
+  const btn = document.getElementById('gateOk');
+  if (btn) btn.disabled = true;
+  gateMsg('확인 중…');
+  app.pin = pin;
+  try {
+    const data = await apiCall('read');
+    app.data = normalize(data);
+    saveLocal();
+    renderAll();
+    writeSession(pin);
+    hideGate();
+    app.online = true;
+    app.lastSync = now();
+    setSync('online');
+    startPolling();
+    toast('비서실이 열렸어요 ✨');
+  } catch (e) {
+    app.pin = '';
+    gateState.buf = '';
+    gateDots(0);
+    if (e && e.message === 'invalid_pin') gateMsg('PIN이 맞지 않아요. 다시 입력해 주세요.');
+    else gateMsg('연결하지 못했어요 (' + ((e && e.message) || '오류') + ')');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 function showPad(which, on) {
@@ -692,6 +782,7 @@ function bind() {
   // 가족 코너
   document.getElementById('btnUnlock').addEventListener('click', function () { openPad('unlock'); });
   document.getElementById('btnLock').addEventListener('click', function () {
+    if (app.api) { lockApp(); toast('비서실을 잠갔어요 🔒'); return; }
     sessionStorage.removeItem(LS.unlocked);
     renderFamily();
     toast('다시 잠갔어요 🔒');
@@ -716,11 +807,33 @@ function bind() {
   });
   document.getElementById('btnPinChange2').addEventListener('click', function () {
     closeSettings();
+    if (app.api) { toast('PIN은 Apps Script의 FAMILY_PIN에서 바꿔요'); return; }
     openPad('unlock', function () { openPad('create'); });
   });
   document.getElementById('btnPinReset2').addEventListener('click', function () {
     closeSettings();
+    if (app.api) { toast('PIN은 Apps Script의 FAMILY_PIN에서 바꿔요'); return; }
     openPad('create');
+  });
+
+  // 가족 PIN 잠금 화면
+  const gateKeys = document.getElementById('gateKeys');
+  if (gateKeys) {
+    gateKeys.addEventListener('click', function (e) {
+      const b = e.target.closest('[data-gate]');
+      if (b) gateInput(b.dataset.gate);
+    });
+  }
+  const gateOk = document.getElementById('gateOk');
+  if (gateOk) gateOk.addEventListener('click', submitGate);
+  const gateSettingsBtn = document.getElementById('gateSettings');
+  if (gateSettingsBtn) gateSettingsBtn.addEventListener('click', openSettings);
+  document.addEventListener('keydown', function (e) {
+    const g = document.getElementById('gate');
+    if (!g || g.hidden) return;
+    if (/^[0-9]$/.test(e.key)) { gateInput(e.key); }
+    else if (e.key === 'Backspace') { gateInput('back'); }
+    else if (e.key === 'Enter') { submitGate(); }
   });
 
   // 아이디어
@@ -797,34 +910,42 @@ async function testApi() {
     const n = normalize(d);
     s.textContent = '연결 성공! 쪽지 ' + n.messages.length + '개 · 미션 ' + n.missions.length + '개를 읽었어요.';
   } catch (e) {
-    s.textContent = '연결하지 못했어요 (' + (e.message || '오류') + '). 배포 권한이 "모든 사용자"인지 확인해 주세요.';
-    s.classList.add('err');
+    if (e && e.message === 'invalid_pin') {
+      s.textContent = '연결은 되는데 PIN이 필요한 서버예요. 저장한 뒤 가족 PIN을 입력하면 열려요.';
+      s.classList.remove('err');
+    } else {
+      s.textContent = '연결하지 못했어요 (' + (e.message || '오류') + '). 배포 권한이 "모든 사용자"인지 확인해 주세요.';
+      s.classList.add('err');
+    }
   } finally {
     app.api = prev;
   }
 }
 
-async function saveApi() {
+function saveApi() {
   const s = document.getElementById('apiStatus');
   const url = normalizeApi(document.getElementById('apiUrl').value);
   if (url === null) { s.textContent = 'https:// 로 시작하는 주소를 넣어 주세요.'; s.classList.add('err'); return; }
   if (!url) { clearApi(); return; }
   app.api = url;
   store.rawSet(LS.api, url);
-  s.classList.remove('err');
-  s.textContent = '저장했어요. 실시간으로 맞추는 중…';
-  startPolling();
-  await refresh(true);
-  if (app.online) { s.textContent = '저장 완료! 이제 실시간으로 함께 써요 ✨'; closeSettings(); toast('실시간 연결 완료 ✨'); }
-  else { s.textContent = '저장했지만 지금은 응답이 없어요. 주소와 배포 권한을 확인해 주세요.'; s.classList.add('err'); }
-  setSync(app.online ? 'online' : 'error');
+  app.pin = '';
+  writeSession('');
+  stopPolling();
+  closeSettings();
+  setSync('');
+  lockApp('가족 PIN을 넣으면 우리 비서실과 연결돼요.');
 }
 
 function clearApi() {
   app.api = '';
+  app.pin = '';
+  writeSession('');
   store.del(LS.api);
   stopPolling();
+  hideGate();
   setSync('offline');
+  renderAll();
   document.getElementById('apiUrl').value = '';
   const s = document.getElementById('apiStatus');
   s.classList.remove('err');
@@ -863,8 +984,9 @@ function boot() {
   if (['room', 'notes', 'missions', 'family'].indexOf(hash) >= 0) switchTab(hash);
 
   if (app.api) {
-    startPolling();
-    refresh(true);
+    app.pin = (function () { try { return sessionStorage.getItem(LS.pinSession) || ''; } catch (e) { return ''; } })();
+    if (app.pin) { startPolling(); refresh(true); }
+    else { lockApp(''); }
   }
 
   // 캐릭터가 심심하면 돌아다녀요
