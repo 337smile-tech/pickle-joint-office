@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>차차 × 순둥이 합동 비서실</title>
+<meta name="description" content="차차와 순둥이 피클이 함께 쓰는 아기자기한 합동 비서실 — 응원 쪽지, 오늘의 미션, 가족 코너.">
+<meta name="theme-color" content="#FFF3EA">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23FFE3EE'/%3E%3Ctext x='50' y='70' font-size='58' text-anchor='middle' fill='%23EF6C9B'%3E%E3%85%8A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-badge" aria-hidden="true">
+      <span class="bb bb1">ㅊ</span><span class="bb bb2">🥒</span>
+    </div>
+    <div class="brand-text">
+      <h1>차차 × 순둥이 합동 비서실</h1>
+      <p class="sync" id="syncPill"><span class="dot" id="syncDot"></span><span id="syncText">준비 중…</span></p>
+    </div>
+  </div>
+  <button class="icon-btn" id="btnSettings" aria-label="설정 열기" title="설정">⚙️</button>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="비서실 메뉴">
+  <button class="tab is-active" role="tab" data-tab="room" aria-selected="true"><span class="ticon">🏠</span>비서실</button>
+  <button class="tab" role="tab" data-tab="notes" aria-selected="false"><span class="ticon">💌</span>응원 쪽지함</button>
+  <button class="tab" role="tab" data-tab="missions" aria-selected="false"><span class="ticon">⭐</span>오늘의 미션</button>
+  <button class="tab" role="tab" data-tab="family" aria-selected="false"><span class="ticon">🎁</span>가족 코너</button>
+</nav>
+
+<main>
+  <!-- ① 합동 비서실 방 -->
+  <section class="panel is-active" id="panel-room" role="tabpanel" aria-label="합동 비서실 방">
+    <div class="room-wrap">
+      <div class="room" id="room">
+        <div class="wall">
+          <div class="wall-stripe" aria-hidden="true"></div>
+
+          <div class="window" aria-hidden="true">
+            <div class="win-sky"><div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div></div>
+            <div class="win-frame"></div>
+            <div class="curtain cl"></div><div class="curtain cr"></div>
+            <div class="sill"></div>
+          </div>
+
+          <button class="board cork" data-goto="notes" aria-label="쪽지 게시판 — 응원 쪽지함 열기">
+            <span class="board-title">쪽지 게시판</span>
+            <span class="stickies" id="corkPreview"></span>
+          </button>
+
+          <button class="board chalk" data-goto="missions" aria-label="미션 칠판 — 오늘의 미션 열기">
+            <span class="chalk-title">오늘의 미션</span>
+            <span class="chalk-lines" id="chalkPreview"></span>
+            <span class="chalk-tray" aria-hidden="true"></span>
+          </button>
+
+          <div class="shelf" aria-hidden="true">
+            <span class="spine s1"></span><span class="spine s2"></span><span class="spine s3"></span>
+            <span class="spine s4"></span><span class="spine s5"></span><span class="spine s6"></span>
+            <span class="shelf-board"></span>
+          </div>
+          <div class="frame" aria-hidden="true">🖼️</div>
+          <div class="garland" aria-hidden="true"><i>🌸</i><i>⭐</i><i>💗</i><i>🌿</i><i>⭐</i></div>
+        </div>
+
+        <div class="floor">
+          <div class="rug" aria-hidden="true"></div>
+
+          <button class="desk" data-desk="chacha" aria-label="작업 책상 — 차차를 열일 모드로">
+            <span class="desk-top"></span>
+            <span class="laptop"><i class="screen"></i><i class="base"></i></span>
+            <span class="mug">☕</span>
+            <span class="desk-paper"></span>
+          </button>
+
+          <button class="armchair" data-desk="sundungi" aria-label="독서 코너 — 순둥이 피클을 독서 모드로">
+            <span class="chair-back"></span><span class="chair-seat"></span><span class="chair-book">📖</span>
+            <span class="floor-lamp" aria-hidden="true"><i class="lamp"></i><i class="pole"></i></span>
+          </button>
+
+          <div class="plant" aria-hidden="true"><span class="pot"></span><span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span></div>
+
+          <div class="actor" id="actor-chacha" data-who="chacha" style="--x:26;--y:86" tabindex="0" role="button" aria-label="차차 — 말 걸기">
+            <div class="bubble" id="bubble-chacha" aria-live="polite"></div>
+            <div class="sprite">
+              <svg viewBox="0 0 100 112" aria-hidden="true">
+                <ellipse cx="50" cy="104" rx="25" ry="5" fill="#DFB9C8" opacity=".45"/>
+                <ellipse cx="22" cy="80" rx="9" ry="7" fill="#FFB9D1"/>
+                <ellipse cx="78" cy="80" rx="9" ry="7" fill="#FFB9D1"/>
+                <path d="M50 12c19 0 31 15 31 36 0 22-13 36-31 36S19 70 19 48C19 27 31 12 50 12z" fill="#FFC9DC"/>
+                <path d="M38 16c-4-6-2-12 4-13 5-1 8 3 8 8" fill="#FFC9DC" stroke="#F6A6C2" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M62 16c4-6 2-12-4-13-5-1-8 3-8 8" fill="#FFC9DC" stroke="#F6A6C2" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="50" cy="52" r="14" fill="#FFF2F7"/>
+                <text x="50" y="58.5" text-anchor="middle" font-size="17" font-family="'Jua',sans-serif" fill="#EF6C9B">ㅊ</text>
+                <ellipse cx="38" cy="38" rx="4.4" ry="5" fill="#5B4A53"/>
+                <ellipse cx="62" cy="38" rx="4.4" ry="5" fill="#5B4A53"/>
+                <circle cx="39.4" cy="36" r="1.5" fill="#fff"/>
+                <circle cx="63.4" cy="36" r="1.5" fill="#fff"/>
+                <ellipse cx="27" cy="47" rx="6" ry="3.6" fill="#FF8FB6" opacity=".55"/>
+                <ellipse cx="73" cy="47" rx="6" ry="3.6" fill="#FF8FB6" opacity=".55"/>
+                <path d="M46 47c2 3 6 3 8 0" stroke="#E0638F" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="plate"><span class="pname">차차</span><span class="pstatus" data-status-for="chacha">💻 열일 중</span></div>
+          </div>
+
+          <div class="actor" id="actor-sundungi" data-who="sundungi" style="--x:66;--y:90" tabindex="0" role="button" aria-label="순둥이 피클 — 말 걸기">
+            <div class="bubble" id="bubble-sundungi" aria-live="polite"></div>
+            <div class="sprite">
+              <svg viewBox="0 0 100 112" aria-hidden="true">
+                <ellipse cx="50" cy="105" rx="22" ry="4.6" fill="#8FB878" opacity=".40"/>
+                <path d="M50 22c15 0 24 12 24 32 0 24-11 40-24 40S26 78 26 54c0-20 9-32 24-32z" fill="url(#pickleG)"/>
+                <path d="M50 22c15 0 24 12 24 32 0 24-11 40-24 40" fill="none" stroke="#7FAF63" stroke-width="2" opacity=".45"/>
+                <circle cx="38" cy="40" r="2.2" fill="#8FBE72"/><circle cx="60" cy="34" r="1.8" fill="#8FBE72"/>
+                <circle cx="44" cy="74" r="2" fill="#8FBE72"/><circle cx="58" cy="86" r="1.7" fill="#8FBE72"/>
+                <path d="M50 22c0-6 3-10 8-11" stroke="#6FA45A" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M57 12c5-4 12-2 13 4-5 4-11 2-13-4z" fill="#9BD07C"/>
+                <path d="M55 15c-1-6 3-11 9-11-1 6-3 9-9 11z" fill="#B7E293"/>
+                <ellipse cx="40" cy="50" rx="4.6" ry="5.4" fill="#4A5B41"/>
+                <ellipse cx="62" cy="50" rx="4.6" ry="5.4" fill="#4A5B41"/>
+                <circle cx="41.6" cy="48" r="1.7" fill="#fff"/>
+                <circle cx="63.6" cy="48" r="1.7" fill="#fff"/>
+                <ellipse cx="29" cy="60" rx="5.6" ry="3.4" fill="#F2A0A8" opacity=".5"/>
+                <ellipse cx="73" cy="60" rx="5.6" ry="3.4" fill="#F2A0A8" opacity=".5"/>
+                <path d="M45 60c2.5 4 8 4 10 0" stroke="#4A5B41" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+                <ellipse cx="25" cy="66" rx="6" ry="4" fill="#BFE39B" transform="rotate(-18 25 66)"/>
+                <ellipse cx="75" cy="66" rx="6" ry="4" fill="#BFE39B" transform="rotate(18 75 66)"/>
+                <defs>
+                  <linearGradient id="pickleG" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#CDEBA8"/><stop offset="1" stop-color="#A8D583"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="plate"><span class="pname">순둥이 피클</span><span class="pstatus" data-status-for="sundungi">✨ 놀이 중</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="room-hint">방 안의 캐릭터를 눌러 말을 걸고, 게시판·칠판·책상을 눌러 보세요. 캐릭터는 심심하면 방을 돌아다녀요 🐾</p>
+    </div>
+
+    <div class="status-cards">
+      <article class="status-card" data-card="chacha">
+        <div class="sc-head">
+          <span class="mini-av pink">ㅊ</span>
+          <div><strong>차차</strong><span>Star님의 피클 · 비서실장</span></div>
+        </div>
+        <div class="chips" role="group" aria-label="차차의 현재 상태">
+          <button class="chip is-on" data-set-status="chacha" data-status="work">💻 열일 중</button>
+          <button class="chip" data-set-status="chacha" data-status="read">📚 독서 중</button>
+          <button class="chip" data-set-status="chacha" data-status="rest">🍵 쉬는 시간</button>
+          <button class="chip" data-set-status="chacha" data-status="play">✨ 놀이 중</button>
+        </div>
+      </article>
+      <article class="status-card" data-card="sundungi">
+        <div class="sc-head">
+          <span class="mini-av green">🥒</span>
+          <div><strong>순둥이 피클</strong><span>순둥이의 피클 · 막내 비서</span></div>
+        </div>
+        <div class="chips" role="group" aria-label="순둥이 피클의 현재 상태">
+          <button class="chip" data-set-status="sundungi" data-status="work">💻 열일 중</button>
+          <button class="chip" data-set-status="sundungi" data-status="read">📚 독서 중</button>
+          <button class="chip" data-set-status="sundungi" data-status="rest">🍵 쉬는 시간</button>
+          <button class="chip is-on" data-set-status="sundungi" data-status="play">✨ 놀이 중</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ② 응원 쪽지함 -->
+  <section class="panel" id="panel-notes" role="tabpanel" aria-label="엄마·순둥이 응원 쪽지함">
+    <div class="card">
+      <h2 class="card-title">💌 엄마·순둥이 응원 쪽지함</h2>
+      <p class="card-sub">누가 쓰는지 고르고, 짧은 응원 한마디를 남겨요. 쪽지는 서로에게 바로 보여요.</p>
+      <div class="author-row" id="authorRow" role="radiogroup" aria-label="쪽지 작성자">
+        <button class="author is-on" role="radio" aria-checked="true" data-author="star"><span class="av star">⭐</span>Star님</button>
+        <button class="author" role="radio" aria-checked="false" data-author="sundungi"><span class="av sun">🐣</span>순둥이</button>
+        <button class="author" role="radio" aria-checked="false" data-author="chacha"><span class="av pink">ㅊ</span>차차</button>
+        <button class="author" role="radio" aria-checked="false" data-author="sundungi_pickle"><span class="av green">🥒</span>순둥이 피클</button>
+      </div>
+      <div class="note-form">
+        <textarea id="noteText" maxlength="140" rows="3" placeholder="예) 오늘도 스스로 잘 해내는 순둥이, 엄마가 응원해! 💗"></textarea>
+        <div class="row-between">
+          <span class="counter" id="noteCounter">0 / 140</span>
+          <button class="primary" id="btnAddNote">쪽지 붙이기</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-grid" id="notesList" aria-live="polite"></div>
+  </section>
+
+  <!-- ③ 오늘의 미션 -->
+  <section class="panel" id="panel-missions" role="tabpanel" aria-label="순둥이 오늘의 미션 칠판">
+    <div class="card">
+      <h2 class="card-title">⭐ 순둥이 오늘의 미션</h2>
+      <p class="card-sub">미션을 하나 끝낼 때마다 별이 하나씩 붙어요. 다 채우면 오늘의 칭찬이 와요!</p>
+      <div class="progress-wrap">
+        <div class="progress-text"><strong id="missionCount">0 / 0</strong> 완료<span id="missionPraise" class="praise">🌱 시작해 볼까요?</span></div>
+        <div class="progress-bar"><i id="progressFill" style="width:0%"></i></div>
+      </div>
+      <form class="add-row" id="missionForm">
+        <input id="missionText" maxlength="40" placeholder="새 미션 (예: 줄넘기 100번)" autocomplete="off">
+        <button class="primary" type="submit">추가</button>
+      </form>
+    </div>
+    <ul class="mission-list" id="missionList" aria-live="polite"></ul>
+    <p class="tiny-hint">미션은 순둥이와 함께 정하면 더 잘 지켜져요 ✨</p>
+  </section>
+
+  <!-- ④ 가족 코너 -->
+  <section class="panel" id="panel-family" role="tabpanel" aria-label="작은 가족 코너">
+    <div class="family-hero">
+      <div class="book" aria-hidden="true">
+        <div class="book-cover">
+          <span class="book-orn">✦</span>
+          <span class="book-title">대저택<br>비밀의 문</span>
+          <span class="book-orn2">❋</span>
+        </div>
+        <div class="book-pages"></div>
+      </div>
+      <div class="family-hero-text">
+        <h2>우리 가족이 만든 그림책</h2>
+        <p>《대저택 비밀의 문》 — 순둥이와 가족이 한 장씩 함께 만든 이야기.<br>문을 열면 우리 가족만의 기념 카드가 기다려요.</p>
+        <div id="familyGate">
+          <button class="primary big" id="btnUnlock">🔒 가족 PIN으로 열기</button>
+          <p class="tiny-hint">PIN은 이 기기에만 저장되는 가벼운 잠금이에요.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="family-content" id="familyContent" hidden>
+      <article class="memorial-card">
+        <div class="mc-head">❋ 우리 가족 기념 카드 ❋</div>
+        <p class="mc-line">어떤 문이 닫혀 있어도, 우리는 같이 열어 왔어요.</p>
+        <p class="mc-body">
+          《대저택 비밀의 문》은 순둥이의 상상에서 시작해 가족의 손끝에서 완성된 첫 그림책이에요.
+          밤마다 한 장씩 읽고, 다음 장을 같이 상상했던 시간이 이 비서실의 첫 번째 추억으로 남아 있어요.
+        </p>
+        <div class="mc-marks">
+          <span>⭐ 첫 이야기</span><span>💗 함께 만든 책</span><span>🌿 우리 가족</span>
+        </div>
+        <p class="mc-sign">— 차차 &amp; 순둥이 피클 드림</p>
+      </article>
+
+      <div class="family-mini">
+        <div class="mini-card">
+          <h3>🎬 다음 장 상상하기</h3>
+          <p id="ideaText">비밀의 문 너머에는 어떤 방이 있을까요?</p>
+          <form class="add-row" id="ideaForm">
+            <input id="ideaInput" maxlength="60" placeholder="우리 가족의 다음 장면" autocomplete="off">
+            <button class="ghost" type="submit">담기</button>
+          </form>
+        </div>
+        <div class="mini-card">
+          <h3>🔑 가족 PIN</h3>
+          <p class="tiny-hint">PIN을 바꾸거나 잊었을 때 다시 정할 수 있어요.</p>
+          <div class="pin-actions">
+            <button class="ghost" id="btnChangePin">PIN 바꾸기</button>
+            <button class="ghost danger" id="btnResetPin">PIN 다시 정하기</button>
+          </div>
+        </div>
+      </div>
+      <button class="ghost lock-again" id="btnLock">🔒 다시 잠그기</button>
+    </div>
+
+    <div class="pin-pad" id="pinPad" hidden>
+      <div class="pad-card">
+        <h3 id="pinPadTitle">가족 PIN 4자리를 눌러 주세요</h3>
+        <div class="pin-dots" id="pinDots"><i></i><i></i><i></i><i></i></div>
+        <div class="keypad" id="keypad">
+          <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button>
+          <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button>
+          <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button>
+          <button data-key="clear" class="key-fn">지움</button><button data-key="0">0</button><button data-key="back" class="key-fn">⌫</button>
+        </div>
+        <p class="pin-msg" id="pinMsg"></p>
+        <button class="ghost small" id="btnPinCancel">닫기</button>
+      </div>
+    </div>
+
+    <div class="pin-pad" id="pinCreate" hidden>
+      <div class="pad-card">
+        <h3 id="pinCreateTitle">우리 가족 PIN을 정해 주세요</h3>
+        <p class="tiny-hint" id="pinCreateHint">4자리 숫자를 두 번 입력하면 돼요.</p>
+        <div class="pin-dots" id="pinCreateDots"><i></i><i></i><i></i><i></i></div>
+        <div class="keypad" id="pinCreateKeys">
+          <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button>
+          <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button>
+          <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button>
+          <button data-key="clear" class="key-fn">지움</button><button data-key="0">0</button><button data-key="back" class="key-fn">⌫</button>
+        </div>
+        <p class="pin-msg" id="pinCreateMsg"></p>
+        <button class="ghost small" id="btnCreateCancel">취소</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>차차와 순둥이 피클이 함께 만든 작은 방 · </span>
+  <a href="https://github.com/337smile-tech/pickle-joint-office" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 설정 -->
+<div class="modal" id="settingsModal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <button class="modal-x" id="btnCloseSettings" aria-label="닫기">✕</button>
+    <h2 id="setTitle">⚙️ 비서실 설정</h2>
+
+    <div class="setting-block">
+      <h3>실시간 연결</h3>
+      <p class="hint">Apps Script 웹앱 URL을 넣으면 두 기기에서 쪽지·미션이 실시간으로 함께 보여요. 비워 두면 이 기기에만 저장돼요.</p>
+      <input id="apiUrl" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+      <div class="row gap">
+        <button class="ghost" id="btnTestApi">연결 테스트</button>
+        <button class="primary" id="btnSaveApi">저장</button>
+        <button class="ghost" id="btnClearApi">연결 해제</button>
+      </div>
+      <p class="status-line" id="apiStatus"></p>
+    </div>
+
+    <div class="setting-block">
+      <h3>가족 PIN</h3>
+      <div class="row gap">
+        <button class="ghost" id="btnPinChange2">PIN 바꾸기</button>
+        <button class="ghost danger" id="btnPinReset2">PIN 다시 정하기</button>
+      </div>
+    </div>
+
+    <div class="setting-block">
+      <h3>데이터</h3>
+      <p class="hint">이 기기에 저장된 쪽지·미션·상태를 지워요. (시트에 저장된 내용은 그대로예요)</p>
+      <button class="ghost danger" id="btnResetLocal">이 기기 데이터 지우기</button>
+    </div>
+
+    <div class="modal-foot">
+      <button class="ghost" id="btnCloseSettings2">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
