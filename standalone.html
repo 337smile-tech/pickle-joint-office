@@ -70,10 +70,10 @@ a:hover{text-decoration:underline}
 
 .bg-blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .blob{position:absolute;border-radius:50%;filter:blur(40px);opacity:.5}
-.b1{width:340px;height:340px;left:-90px;top:60px;background:#FFDCE9}
-.b2{width:300px;height:300px;right:-80px;top:180px;background:#DFF1FF}
-.b3{width:260px;height:260px;left:30%;bottom:-90px;background:#FFF0C9}
-.b4{width:200px;height:200px;right:14%;bottom:40px;background:#E7E0FB}
+.blob.b1{width:340px;height:340px;left:-90px;top:60px;background:#FFDCE9}
+.blob.b2{width:300px;height:300px;right:-80px;top:180px;background:#DFF1FF}
+.blob.b3{width:260px;height:260px;left:30%;bottom:-90px;background:#FFF0C9}
+.blob.b4{width:200px;height:200px;right:14%;bottom:40px;background:#E7E0FB}
 
 /* ---------- 상단 ---------- */
 .topbar{
@@ -199,11 +199,11 @@ main{
   background:radial-gradient(circle at 40% 40%,#FFE59A,#FFC965);box-shadow:0 0 14px rgba(255,200,90,.6)}
 .win-sky .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.92;filter:blur(.3px)}
 .win-sky .cloud::before,.win-sky .cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
-.c1{left:10%;top:26%;width:44%;height:12%;animation:drift 14s ease-in-out infinite}
-.c1::before{width:60%;height:180%;left:8%;top:-80%}
-.c1::after{width:46%;height:150%;right:6%;top:-55%}
-.c2{left:22%;top:60%;width:36%;height:9%;animation:drift 18s ease-in-out infinite reverse}
-.c2::before{width:64%;height:190%;left:12%;top:-90%}
+.win-sky .c1{left:10%;top:26%;width:44%;height:12%;animation:drift 14s ease-in-out infinite}
+.win-sky .c1::before{width:60%;height:180%;left:8%;top:-80%}
+.win-sky .c1::after{width:46%;height:150%;right:6%;top:-55%}
+.win-sky .c2{left:22%;top:60%;width:36%;height:9%;animation:drift 18s ease-in-out infinite reverse}
+.win-sky .c2::before{width:64%;height:190%;left:12%;top:-90%}
 @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(16%)}}
 .win-frame{position:absolute;inset:0;border:5px solid #FFFDFB;border-radius:12px 12px 8px 8px}
 .win-frame::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:4px;background:#FFFDFB;transform:translateX(-50%)}
@@ -256,8 +256,8 @@ main{
 .shelf{position:absolute;left:83.5%;top:18%;width:14%;height:31%;background:linear-gradient(180deg,#F0D3B4,#E3BE98);
   border-radius:5px;box-shadow:inset 0 0 0 3px #D3A97F,0 5px 12px rgba(160,120,90,.22);display:flex;align-items:flex-end;gap:2.5%;padding:4% 5% 6%}
 .spine{flex:1;border-radius:2px 2px 0 0;box-shadow:inset 0 -2px 0 rgba(0,0,0,.06)}
-.s1{height:92%;background:#F5A9C4}.s2{height:100%;background:#9DD8B9}.s3{height:84%;background:#FFD98E}
-.s4{height:96%;background:#B9C9F2}.s5{height:78%;background:#F3B6A0}.s6{height:90%;background:#CBB8EC}
+.shelf .spine.s1{height:92%;background:#F5A9C4}.s2{height:100%;background:#9DD8B9}.s3{height:84%;background:#FFD98E}
+.shelf .spine.s4{height:96%;background:#B9C9F2}.s5{height:78%;background:#F3B6A0}.s6{height:90%;background:#CBB8EC}
 .shelf-plant{position:absolute;right:8%;top:-34%;font-size:clamp(8px,1.7cqw,16px);filter:drop-shadow(0 2px 3px rgba(0,0,0,.12))}
 .shelf-board{position:absolute;left:0;right:0;bottom:0;height:9%;background:#C79A6D;border-radius:0 0 4px 4px}
 .frame{position:absolute;left:5.5%;top:47%;width:8%;aspect-ratio:1.15;display:grid;place-items:center;
