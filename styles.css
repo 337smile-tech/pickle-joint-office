@@ -182,10 +182,10 @@ main{
   box-shadow:0 6px 16px rgba(150,170,200,.25),inset 0 0 0 5px #FFFDFB;
 }
 .win-sky{position:absolute;inset:0}
-.sun{position:absolute;right:14%;top:14%;width:26%;aspect-ratio:1;border-radius:50%;
+.win-sky .sun{position:absolute;right:14%;top:14%;width:26%;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle at 40% 40%,#FFE59A,#FFC965);box-shadow:0 0 14px rgba(255,200,90,.6)}
-.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.92;filter:blur(.3px)}
-.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
+.win-sky .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.92;filter:blur(.3px)}
+.win-sky .cloud::before,.win-sky .cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
 .c1{left:10%;top:26%;width:44%;height:12%;animation:drift 14s ease-in-out infinite}
 .c1::before{width:60%;height:180%;left:8%;top:-80%}
 .c1::after{width:46%;height:150%;right:6%;top:-55%}
