@@ -488,6 +488,7 @@ function lockApp(msg) {
   gateState.buf = '';
   const g = document.getElementById('gate');
   if (g) g.hidden = false;
+  document.body.classList.add('locked');
   gateDots(0);
   const m = document.getElementById('gateMsg');
   if (m) { m.textContent = msg || ''; m.classList.remove('ok'); }
@@ -499,6 +500,7 @@ function lockApp(msg) {
 function hideGate() {
   const g = document.getElementById('gate');
   if (g) g.hidden = true;
+  document.body.classList.remove('locked');
 }
 
 function writeSession(v) {

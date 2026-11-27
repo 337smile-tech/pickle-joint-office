@@ -698,6 +698,7 @@ main{
 .gate-actions{display:flex;flex-direction:column;gap:9px;align-items:center;margin-top:8px}
 .gate-actions .primary{width:100%}
 .gate .pin-msg.ok{color:#57A87C}
+body.locked main,body.locked .tabs,body.locked .foot{visibility:hidden}
 
 /* =========================================================
    토스트 / 모달 / 푸터
@@ -1637,6 +1638,7 @@ function lockApp(msg) {
   gateState.buf = '';
   const g = document.getElementById('gate');
   if (g) g.hidden = false;
+  document.body.classList.add('locked');
   gateDots(0);
   const m = document.getElementById('gateMsg');
   if (m) { m.textContent = msg || ''; m.classList.remove('ok'); }
@@ -1648,6 +1650,7 @@ function lockApp(msg) {
 function hideGate() {
   const g = document.getElementById('gate');
   if (g) g.hidden = true;
+  document.body.classList.remove('locked');
 }
 
 function writeSession(v) {
