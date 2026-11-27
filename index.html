@@ -44,6 +44,7 @@
       <div class="room" id="room">
         <div class="wall">
           <div class="wall-stripe" aria-hidden="true"></div>
+          <div class="arch" aria-hidden="true"></div>
 
           <div class="window" aria-hidden="true">
             <div class="win-sky"><div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div></div>
@@ -51,6 +52,8 @@
             <div class="curtain cl"></div><div class="curtain cr"></div>
             <div class="sill"></div>
           </div>
+
+          <div class="clock" aria-hidden="true"><span class="hand h1"></span><span class="hand h2"></span><span class="pin"></span></div>
 
           <button class="board cork" data-goto="notes" aria-label="쪽지 게시판 — 응원 쪽지함 열기">
             <span class="board-title">쪽지 게시판</span>
@@ -67,8 +70,15 @@
             <span class="spine s1"></span><span class="spine s2"></span><span class="spine s3"></span>
             <span class="spine s4"></span><span class="spine s5"></span><span class="spine s6"></span>
             <span class="shelf-board"></span>
+            <span class="shelf-plant">🪴</span>
           </div>
           <div class="frame" aria-hidden="true">🖼️</div>
+          <div class="photo-string" aria-hidden="true"><i>📖</i><i>🌿</i><i>⭐</i><i>💗</i></div>
+          <div class="sideboard" aria-hidden="true">
+            <span class="sb-body"></span><span class="sb-top"></span>
+            <span class="sb-item i1">🪴</span><span class="sb-item i2">🕯️</span><span class="sb-item i3">🍵</span>
+            <span class="sb-books"><i></i><i></i><i></i><i></i></span>
+          </div>
           <div class="garland" aria-hidden="true"><i>🌸</i><i>⭐</i><i>💗</i><i>🌿</i><i>⭐</i></div>
         </div>
 
@@ -89,7 +99,7 @@
 
           <div class="plant" aria-hidden="true"><span class="pot"></span><span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span></div>
 
-          <div class="actor" id="actor-chacha" data-who="chacha" style="--x:26;--y:86" tabindex="0" role="button" aria-label="차차 — 말 걸기">
+          <div class="actor" id="actor-chacha" data-who="chacha" style="--x:31;--y:80" tabindex="0" role="button" aria-label="차차 — 말 걸기">
             <div class="bubble" id="bubble-chacha" aria-live="polite"></div>
             <div class="sprite">
               <svg viewBox="0 0 100 112" aria-hidden="true">
@@ -113,7 +123,7 @@
             <div class="plate"><span class="pname">차차</span><span class="pstatus" data-status-for="chacha">💻 열일 중</span></div>
           </div>
 
-          <div class="actor" id="actor-sundungi" data-who="sundungi" style="--x:66;--y:90" tabindex="0" role="button" aria-label="순둥이 피클 — 말 걸기">
+          <div class="actor" id="actor-sundungi" data-who="sundungi" style="--x:64;--y:82" tabindex="0" role="button" aria-label="순둥이 피클 — 말 걸기">
             <div class="bubble" id="bubble-sundungi" aria-live="polite"></div>
             <div class="sprite">
               <svg viewBox="0 0 100 112" aria-hidden="true">
