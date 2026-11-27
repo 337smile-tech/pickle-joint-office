@@ -685,6 +685,7 @@ main{
 .gate-actions{display:flex;flex-direction:column;gap:9px;align-items:center;margin-top:8px}
 .gate-actions .primary{width:100%}
 .gate .pin-msg.ok{color:#57A87C}
+body.locked main,body.locked .tabs,body.locked .foot{visibility:hidden}
 
 /* =========================================================
    토스트 / 모달 / 푸터
