@@ -14,8 +14,9 @@
  *
  * · 시트에 붙여 만든 스크립트라면 SPREADSHEET_ID 는 비워 두세요.
  *   다른 곳에서 만든 독립 스크립트라면 시트 주소의 /d/.../ 부분을 넣으세요.
- * · API 는 GET/POST 둘 다 지원합니다.
- *   GET  : ?action=read                                  → 전체 데이터
+ * · API 는 GET/POST 둘 다 지원합니다. 모든 요청에는 가족 PIN(?pin=... 또는 body 의 pin)이 필요합니다.
+ *   PIN 이 맞지 않으면 {"ok":false,"error":"invalid_pin"} 만 돌려주고 데이터는 절대 내려주지 않습니다.
+ *   GET  : ?action=read&pin=1234                                  → 전체 데이터
  *          ?action=addMessage&payload={"author":"star","text":"..."}
  *          ?action=addMission&payload={"text":"..."}
  *          ?action=toggleMission&payload={"id":"...","done":true,"by":"star"}
@@ -28,6 +29,11 @@
  */
 
 var CONFIG = {
+  // ★ 가족 비밀번호 (4자리 권장, 숫자 아니어도 됩니다) ★
+  //   아래 '0000'을 우리 가족만 아는 값으로 꼭 바꿔 주세요.
+  //   이 값은 시트 안의 스크립트에만 있고, GitHub에 올라가는 웹페이지 소스에는 없습니다.
+  FAMILY_PIN: '0000',
+
   // 시트에 붙여 만든 스크립트면 '' 로 두세요.
   SPREADSHEET_ID: '',
 
@@ -268,15 +274,23 @@ function checkKey_(p) {
   }
 }
 
+/** 가족 PIN 검증. CONFIG.FAMILY_PIN 이 비어 있으면 검증하지 않습니다. */
+function pinOk_(pin) {
+  var expected = String(CONFIG.FAMILY_PIN || '');
+  if (!expected) return true;
+  return String(pin === null || typeof pin === 'undefined' ? '' : pin) === expected;
+}
+
 function parsePayload_(raw) {
   if (!raw) return {};
   if (typeof raw === 'object') return raw;
   try { return JSON.parse(raw); } catch (e) { return {}; }
 }
 
-function route_(action, payload, key) {
+function route_(action, payload, key, pin) {
   try {
     checkKey_({ key: key });
+    if (!pinOk_(pin)) return json_({ ok: false, error: 'invalid_pin' });
     if (!action || action === 'read') return json_({ ok: true, data: readAll_() });
     return json_({ ok: true, data: handleAction_(action, payload) });
   } catch (err) {
@@ -286,7 +300,7 @@ function route_(action, payload, key) {
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
-  return route_(p.action || 'read', parsePayload_(p.payload), p.key);
+  return route_(p.action || 'read', parsePayload_(p.payload), p.key, p.pin);
 }
 
 function doPost(e) {
@@ -295,5 +309,5 @@ function doPost(e) {
   var p = (e && e.parameter) || {};
   var action = body.action || p.action || 'read';
   var payload = body.payload || parsePayload_(p.payload);
-  return route_(action, payload, body.key || p.key);
+  return route_(action, payload, body.key || p.key, body.pin || p.pin);
 }
