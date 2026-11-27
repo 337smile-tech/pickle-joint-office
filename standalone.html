@@ -1595,13 +1595,10 @@ function randomLine(who) {
 function roam(who) {
   const actor = document.getElementById('actor-' + who);
   if (!actor || actor.classList.contains('talking')) return;
-  const other = document.getElementById('actor-' + (who === 'chacha' ? 'sundungi' : 'chacha'));
-  let x, y, tries = 0;
-  do {
-    x = 16 + Math.random() * 68;
-    y = 74 + Math.random() * 8;
-    tries++;
-  } while (other && tries < 8 && Math.abs(parseFloat(other.style.getPropertyValue('--x')) - x) < 14);
+  // 서로 자리가 겹치지 않게 각자 방의 절반만 쓴다 (차차: 왼쪽, 순둥이 피클: 오른쪽)
+  const range = who === 'chacha' ? [13, 45] : [55, 87];
+  const x = range[0] + Math.random() * (range[1] - range[0]);
+  const y = 74 + Math.random() * 8;
   actor.style.setProperty('--x', x.toFixed(1));
   actor.style.setProperty('--y', y.toFixed(1));
   actor.classList.add('walking');
