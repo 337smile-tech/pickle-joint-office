@@ -72,6 +72,9 @@ apps-script/Code.gs   Google Sheets JSON API (GET/POST)
 
 ## 6. 개발 메모
 
+- `index.html`의 `styles.css?v=` / `app.js?v=` 숫자를 올리면 브라우저 캐시(최대 10분)를 건너뛰고 바로 새 버전이 보여요.
+  CSS·JS를 고친 뒤 배포할 때 함께 올려 주세요.
+
 - 쓰기 요청은 Apps Script의 302 리다이렉트에서 본문이 유실되는 문제를 피하려고
   `GET ?action=…&payload=…`로 보냅니다. 서버는 `doPost`도 지원합니다.
 - 오프라인·오류 시에는 로컬에 먼저 저장하고 `pending` 큐에 담아, 연결이 돌아오면 자동으로 올립니다.
