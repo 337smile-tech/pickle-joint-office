@@ -561,7 +561,7 @@ main{
   box-shadow:0 4px 10px rgba(255,190,90,.45)}
 .mission .mtext{flex:1;min-width:0;font-size:14px;word-break:break-word}
 .mission.done{background:linear-gradient(120deg,#F4FBEC,#EAF7E2);border-color:#D8EFC8}
-.mission.done .mtext{text-decoration:line-through;color:#93A88B}
+.mission.done .mtext{text-decoration:line-through;color:#6E8A66}
 .mission .del{width:26px;height:26px;border-radius:50%;color:#C9B4BC;font-size:16px;display:grid;place-items:center;opacity:.5;transition:.15s}
 .mission .del:hover{background:#FFF0F4;color:#C2607A;opacity:1}
 .mission .who{font-size:10.5px;color:#A79AA0;white-space:nowrap}
